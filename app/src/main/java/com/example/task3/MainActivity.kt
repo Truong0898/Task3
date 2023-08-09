@@ -2,7 +2,6 @@ package com.example.task3
 
 import android.os.Bundle
 import android.text.Editable
-import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.View
 import android.view.View.OnClickListener
@@ -11,14 +10,11 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.activity.ComponentActivity
 import com.example.task3.databinding.ActivityMainBinding
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.text.DecimalFormat
-import java.text.NumberFormat
-import java.util.Locale
 import java.util.logging.Logger
 
 class MainActivity : ComponentActivity(), OnClickListener {
@@ -67,7 +63,8 @@ class MainActivity : ComponentActivity(), OnClickListener {
         when (v?.id) {
             R.id.btnSearch -> {
 
-                GlobalScope.launch(Dispatchers.Main) {
+                val scope = CoroutineScope(Dispatchers.Main)
+                scope.launch{
                     val currentTime1 = System.currentTimeMillis()
                     val string = edtNumber1.text.toString()
                     val list = string.split(",").map { it.toInt() }
@@ -90,19 +87,6 @@ class MainActivity : ComponentActivity(), OnClickListener {
             }
 
         }
-    }
-
-
-    fun convertEditText(editText: EditText): String {
-        val string = editText.text.toString()
-        val numberFormat = NumberFormat.getNumberInstance(Locale.ENGLISH)
-        val format = DecimalFormat("#")
-        if (!TextUtils.isEmpty(string)) {
-            val textNb = string.replace(",".toRegex(), "")
-            val number = textNb.toDouble()
-            return format.format(number)
-        }
-        return ""
     }
 
 }
